@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        input {
+            width: 100%;
+            font-size: 18px;
+            text-align: right;
+            box-sizing: border-box;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<table border="1">
+    <tr>
+    <td colspan="3">
+        <input type="text" id="inputBox" value="0" readonly />
+    </td>
+    <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>  
+</tr>
+<tr>
+    <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
+    <td class="digitButton" onclick="digitBtnPressed(8)">8</td>
+    <td class="digitButton" onclick="digitBtnPressed(9)">9</td>
+    <td class="operatorButton" onclick="operatorBtnPressed('*')">x</td>
+</tr>
+<tr>
+    <td class="digitButton" onclick="digitBtnPressed(4)">4</td>
+    <td class="digitButton" onclick="digitBtnPressed(5)">5</td>
+    <td class="digitButton" onclick="digitBtnPressed(6)">6</td>
+    <td class="operatorButton" onclick="operatorBtnPressed('-')">-</td>
+</tr>
+<tr>
+    <td class="digitButton" onclick="digitBtnPressed(1)">1</td>
+    <td class="digitButton" onclick="digitBtnPressed(2)">2</td>
+    <td class="digitButton" onclick="digitBtnPressed(3)">3</td>
+    <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td> 
+</tr>
+<tr>
+    <td  onclick="clearInput()">AC</td> <!-- Added class -->
+    <td class="digitButton" onclick="digitBtnPressed(0)">0</td>
+    <td class="digitButton" onclick="digitBtnPressed('.')">.</td>
+    <td class="operatorButton" onclick="calculateResult()">=</td> 
+</tr>
+</table>
+
+<script>
+    function digitBtnPressed(button) {
+        var inputBox = document.getElementById("inputBox");
+        if (inputBox.value === "0" && button !== '.') {
+            inputBox.value = button;
+        } else {
+            // prevent multiple decimals in a row
+            var lastNumber = inputBox.value.split(/[\+\-\*\/]/).pop();
+            if (button === '.' && lastNumber.includes('.')) return;
+            inputBox.value += button;
+        }
+    }
+
+    function operatorBtnPressed(op) {
+        var inputBox = document.getElementById("inputBox");
+        var lastChar = inputBox.value.slice(-1);
+
+        if ("+-*/".includes(lastChar)) {
+            // replace last operator
+            inputBox.value = inputBox.value.slice(0, -1) + op;
+        } else {
+            inputBox.value += op;
+        }
+    }
+
+    function calculateResult() {
+        var input = document.getElementById("inputBox").value;
+
+        // Prevent trailing operators like "12+"
+        if (/[\+\-\*\/.]$/.test(input)) {
+            document.getElementById("inputBox").value = "Error";
+            return;
+        }
+
+        try {
+            var result = Function('"use strict";return (' + input + ')')();
+            document.getElementById("inputBox").value = result;
+        } catch (e) {
+            document.getElementById("inputBox").value = "Error";
+        }
+    }
+
+    function clearInput() {
+        document.getElementById("inputBox").value = "0";
+    }
+</script>
+
+</body>
+</html>
