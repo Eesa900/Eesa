@@ -1,10 +1,15 @@
-# Loop Control Statement
+#Operators
 
-count = 0
+#Addition(+)
+#Subtraction(-)
+#Multiplication(*)
+#divison(/)
+#Modulus(%)
+#Exponent(**)
 
-while count < 5:
-    print(count)
-    count += 1
-    if count == 3:
-        break  # Exit the loop when the count reaches 3
- 
+x = 10
+x -= 2
+
+print(x)
+
+
